@@ -1,0 +1,89 @@
+# ALB
+resource "aws_lb" "test" {
+  name            = "test-lb-tf"
+  internal        = false
+  security_groups = [aws_security_group.lb_sg.id]
+  subnets         = [aws_subnet.main.id]
+
+  # enable_deletion_protection = true
+
+  tags = {
+    Environment = "production"
+  }
+}
+
+# ALB Target Group
+resource "aws_lb_target_group" "tcp-example" {
+  name     = "tf-example-lb-tg"
+  port     = 80
+  protocol = "TCP"
+  vpc_id   = aws_vpc.main.id
+
+  target_group_health {
+    dns_failover {
+      minimum_healthy_targets_count      = "1"
+      minimum_healthy_targets_percentage = "off"
+    }
+
+    unhealthy_state_routing {
+      minimum_healthy_targets_count      = "1"
+      minimum_healthy_targets_percentage = "off"
+    }
+  }
+}
+
+# ALB Listener
+resource "aws_lb_listener" "front_end" {
+  load_balancer_arn = aws_lb.test.arn
+
+  # If adding SSL certi, then change the port and protocol to 443 and HTTPS, respectively
+  port     = "80"
+  protocol = "HTTP"
+
+
+  #  SSL certi for HTTPS
+  # ssl_policy = "ELBSecurityPolicy-2016-08"
+  # certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.tcp-example.arn
+  }
+}
+
+# ALB Security Group
+resource "aws_security_group" "lb_sg" {
+  name        = "main-sg"
+  description = "allow port 80 and 22"
+}
+
+
+resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4_lb" {
+  security_group_id = aws_security_group.lb_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 80
+  ip_protocol       = "tcp"
+  to_port           = 80
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_https_ipv4_lb" {
+  security_group_id = aws_security_group.lb_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 443
+  ip_protocol       = "tcp"
+  to_port           = 443
+}
+
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4_lb" {
+  security_group_id = aws_security_group.lb_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}
+
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv6_lb" {
+  security_group_id = aws_security_group.lb_sg.id
+  cidr_ipv6         = "::/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}

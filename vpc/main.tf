@@ -33,9 +33,9 @@ resource "aws_eip" "lb" {
 }
 
 # NAT Gateway
-resource "aws_nat_gateway" "example" {
-  allocation_id = aws_eip.example.id
-  subnet_id     = aws_subnet.example.id
+resource "aws_nat_gateway" "ngw" {
+  allocation_id = aws_eip.lb.id
+  subnet_id     = aws_subnet.main.id
 
   tags = {
     Name = "gw NAT"
@@ -43,12 +43,12 @@ resource "aws_nat_gateway" "example" {
 
   # To ensure proper ordering, it is recommended to add an explicit dependency
   # on the Internet Gateway for the VPC.
-  depends_on = [aws_internet_gateway.example]
+  depends_on = [aws_internet_gateway.gw]
 }
 
 # Route Table
-resource "aws_route_table" "example" {
-  vpc_id = aws_vpc.main
+resource "aws_route_table" "rt" {
+  vpc_id = aws_vpc.main.id
 
   route {
     cidr_block = "10.0.1.0/24"
@@ -59,7 +59,7 @@ resource "aws_route_table" "example" {
     # for local ie private connection
     # gateway_id = local
     # for NAT Gateway
-    # nat_gateway_id = aws_nat_gateway.example.id
+    # nat_gateway_id = aws_nat_gateway.ngw.id
     # can be more
     # vpc_endpoint_id = 
     # transit_gateway_id =  

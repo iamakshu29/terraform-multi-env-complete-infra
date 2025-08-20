@@ -1,0 +1,6 @@
+Need to check all the resource in S3...Once again
+Specifically
+1. ACL 
+2. Write my own bucket policy and save it in json file instead of using data block
+>> data "aws_iam_policy_document" "allow_access_from_another_account"
+3. SSE Encryption

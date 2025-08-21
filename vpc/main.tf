@@ -71,3 +71,19 @@ resource "aws_route_table" "rt" {
   }
 
 }
+
+# VPC Peering Resource
+resource "aws_vpc_peering_connection" "foo" {
+  # ID of VPC with which you are requesting to connected
+  peer_vpc_id = aws_vpc.bar.id
+
+  # Id of requester VPC
+  vpc_id = aws_vpc.foo.id
+
+  # Accepting connection by both VPCs
+  auto_accept = true
+
+  tags = {
+    Name = "VPC Peering between foo and bar"
+  }
+}

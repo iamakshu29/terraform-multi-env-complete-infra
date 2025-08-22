@@ -1,0 +1,4 @@
+variable "asg" {
+  description = "value"
+  
+}

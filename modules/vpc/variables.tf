@@ -1,54 +1,70 @@
-# variable "vpc" {
-#   description = "value"
-#   default     = {}
-# }
+variable "env" {
+  description = "Which Env is using by us"
+  default = ""  
+}
+
+variable "kms" {
+  description = "value"
+  default     = {}
+}
+
+variable "asg" {
+  description = "value"
+  default     = {}
+}
+
+variable "alb" {
+  description = "value"
+  default     = {}
+}
+
+variable "s3" {
+  description = "value"
+  default     = {}
+}
+
+variable "ec2" {
+  description = "value"
+  default     = {}
+}
 
 variable "vpc" {
   description = "value"
-  default = {
-    test = {
-      cidr_block = "10.1.0.0/16"
-      tags = {
-        Name = "test-vpc"
-      }
-    },
-    dev = {
-      cidr_block = "10.0.0.0/16"
-      tags = {
-        Name = "dev-vpc"
-      }
-    },
-    prod = {
-      cidr_block = "10.2.0.0/16"
-      tags = {
-        Name = "prod-vpc"
-      }
-    }
-  }
+  default     = {}
 }
-
 
 variable "subnet" {
   description = "value"
   default     = {}
 }
 
-variable "igw" {
+variable "internet_gateway" {
   description = "value"
   default     = {}
 }
 
-variable "nat-gateway" {
+variable "nat_gateway" {
   description = "value"
   default     = {}
 }
 
-variable "route-table" {
+variable "route_table" {
   description = "value"
   default     = {}
 }
 
-variable "vpc-peering" {
+variable "vpc_peering" {
+  description = "value"
+  default     = {}
+}
+
+
+variable "rds" {
+  description = "value"
+  default     = {}
+}
+
+variable "secrets_manager" {
   description = "value"
   default     = {}
 }

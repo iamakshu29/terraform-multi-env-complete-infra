@@ -1,3 +1,8 @@
+variable "env" {
+  description = "Which Env is using by us"
+  default = ""  
+}
+
 variable "kms" {
   description = "value"
   default     = {}
@@ -33,22 +38,22 @@ variable "subnet" {
   default     = {}
 }
 
-variable "igw" {
+variable "internet_gateway" {
   description = "value"
   default     = {}
 }
 
-variable "nat-gateway" {
+variable "nat_gateway" {
   description = "value"
   default     = {}
 }
 
-variable "route-table" {
+variable "route_table" {
   description = "value"
   default     = {}
 }
 
-variable "vpc-peering" {
+variable "vpc_peering" {
   description = "value"
   default     = {}
 }

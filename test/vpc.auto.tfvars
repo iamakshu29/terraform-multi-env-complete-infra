@@ -1,4 +1,6 @@
 env = "test"
+use_igw = true
+use_nat = false
 
 vpc = {
   cidr_block = "10.1.0.0/16"
@@ -14,6 +16,7 @@ subnet = {
     tags = {
       Name = "test-subnet-1"
       Type = "test-public-1"
+      Public = "true"
     }
   },
   test_2 = {
@@ -22,6 +25,7 @@ subnet = {
     tags = {
       Name = "test-subnet-2"
       Type = "test-public-2"
+      Public = "true"
     }
   },
   test_3 = {
@@ -30,6 +34,7 @@ subnet = {
     tags = {
       Name = "test-subnet-3"
       Type = "test-private-1"
+      Public = "false"
     }
   },
   test_4 = {
@@ -38,6 +43,7 @@ subnet = {
     tags = {
       Name = "test-subnet-4"
       Type = "test-private-2"
+      Public = "false"
     }
   }
 }
@@ -56,7 +62,7 @@ nat_gateway = {
 }
 
 route_table = {
-  cidr_block = "10.1.0.0/16"
+  cidr_block = "0.0.0.0/0"
   tags = {
     Name = "test-route-table"
   }

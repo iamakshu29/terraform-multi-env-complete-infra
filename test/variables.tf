@@ -53,6 +53,16 @@ variable "route_table" {
   default     = {}
 }
 
+variable "use_igw" {
+  description = "Boolean value"
+  # default = Boolean 
+}
+
+variable "use_nat" {
+  description = "Boolean value"
+  # default = Boolean 
+}
+
 variable "vpc_peering" {
   description = "value"
   default     = {}

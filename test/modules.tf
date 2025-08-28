@@ -10,6 +10,8 @@ module "vpc" {
   vpc_peering      = var.vpc_peering
   nat_gateway      = var.nat_gateway
   route_table      = var.route_table
+  use_igw = var.use_igw
+  use_nat = var.use_nat
 }
 
 # module "ec2" {

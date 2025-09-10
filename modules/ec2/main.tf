@@ -1,14 +1,12 @@
 resource "aws_instance" "main" {
-  ami           = "ami-0150ccaf51ab55a51"
-  instance_type = "t2.micro"
-  key_name      = "terraform"
-  subnet_id     = aws_subnet.example.id
-  vpc_security_group_ids = [ aws_security_group.main ]
-  tags = {
-    Name = "HelloWorld"
-  }
+  for_each               = var.ec2
+  ami                    = each.value.ami
+  instance_type          = each.value.instance_type
+  key_name               = each.value.key_name
+  subnet_id              = local.subnet_ids[4] # need output from vpc.tf
+  vpc_security_group_ids = [aws_security_group.main]
+  tags                   = each.value.tags
 }
-
 
 resource "aws_security_group" "main" {
   name        = "main-sg"

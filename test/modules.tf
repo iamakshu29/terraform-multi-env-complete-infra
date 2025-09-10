@@ -1,9 +1,5 @@
 module "vpc" {
   source = "../modules/vpc/"
-  # for_each = local.region_providers
-  # providers = {
-  #   aws = each.value
-  # }
   vpc              = var.vpc
   subnet           = var.subnet
   internet_gateway = var.internet_gateway
@@ -14,10 +10,10 @@ module "vpc" {
   use_nat = var.use_nat
 }
 
-# module "ec2" {
-#   source = "../modules/ec2"
-#   ec2    = var.ec2
-# }
+module "ec2" {
+  source = "../modules/ec2"
+  ec2    = var.ec2
+}
 
 # module "alb" {
 #   source = "../modules/alb"

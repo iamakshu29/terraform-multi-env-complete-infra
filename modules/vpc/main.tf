@@ -85,7 +85,7 @@ resource "aws_route" "default_route" {
 # To bridge the gap between subnet and route_table we use route_table_association
 # they are subnet association, the feature in which we explicitly pull the subnet from the default route table where all the subnet are present implcitly
 resource "aws_route_table_association" "rt_association" {
-  region = "us-east-1"
+  # region = "us-east-1"
   subnet_id = aws_subnet.main["test_2"].id
   # OR
   # gateway_id = aws_nat_gateway.ngw.id

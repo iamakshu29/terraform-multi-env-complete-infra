@@ -1,23 +1,20 @@
 # ALB
 resource "aws_lb" "test" {
-  name            = "test-lb-tf"
-  internal        = false
+  name            = var.alb.alb_test.name
+  internal        = try(var.alb.alb_test.internal==true ? true: false,false)
   security_groups = [aws_security_group.lb_sg.id]
-  subnets         = [aws_subnet.main.id]
-
+  subnets         = var.subnets # expects a list
   # enable_deletion_protection = true
 
-  tags = {
-    Environment = "production"
-  }
+  tags = var.alb.tags
 }
 
 # ALB Target Group
 resource "aws_lb_target_group" "tcp-example" {
-  name     = "tf-example-lb-tg"
-  port     = 80
+  name     = var.alb.alb_tg.name
+  port     = try(var.alb.alb_tg.port,80)
   protocol = "TCP"
-  vpc_id   = aws_vpc.main.id
+  # vpc_id   = aws_vpc.main.id
 
   target_group_health {
     dns_failover {

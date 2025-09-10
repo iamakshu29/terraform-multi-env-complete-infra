@@ -1,15 +1,19 @@
-output "public-subnet-1" {
+output "public_subnet_1" {
   value = aws_subnet.main["test_1"].id
 }
 
-output "public-subnet-2" {
+output "public_subnet_2" {
   value = aws_subnet.main["test_2"].id
 }
 
-output "private-subnet-1" {
-  value = aws_subnet.main["test_1"].id
+output "private_subnet_1" {
+  value = aws_subnet.main["test_3"].id
 }
 
-output "private-subnet-2" {
-  value = aws_subnet.main["test_2"].id
+output "private_subnet_2" {
+  value = aws_subnet.main["test_4"].id
+}
+
+output "vpc_id" {
+  value = aws_vpc.main.id
 }

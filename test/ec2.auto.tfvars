@@ -6,12 +6,12 @@ ec2 = {
     Name = "HelloWorld"
   }
 
-#   allow_tls_ipv4 = {
-#     cidr_ipv4 = "0.0.0.0"
-#   }
+  #   allow_tls_ipv4 = {
+  #     cidr_ipv4 = "0.0.0.0"
+  #   }
 
-#   allow_ssh_ipv4 = {
-#     cidr_ipv4 = "0.0.0.0"
-#   }
+  #   allow_ssh_ipv4 = {
+  #     cidr_ipv4 = "0.0.0.0"
+  #   }
 }
 

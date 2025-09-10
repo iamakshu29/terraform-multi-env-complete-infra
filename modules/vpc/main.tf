@@ -4,13 +4,13 @@ provider "aws" {
 }
 
 resource "aws_vpc" "main" {
-  cidr_block = var.vpc.cidr_block
-  tags       = var.vpc.tags
+  cidr_block = var.vpc.test_vpc.cidr_block
+  tags       = var.vpc.test_vpc.tags
 }
 
 # Subnet
 resource "aws_subnet" "main" {
-  for_each = var.subnet
+  for_each = var.vpc.subnet
 
   vpc_id            = aws_vpc.main.id
   cidr_block        = each.value.cidr_block
@@ -25,7 +25,7 @@ resource "aws_subnet" "main" {
 # Internet Gateway
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
-  tags   = var.internet_gateway.tags
+  tags   = var.vpc.internet_gateway.tags
 }
 
 # Elastic IP
@@ -37,7 +37,7 @@ resource "aws_eip" "lb" {
 resource "aws_nat_gateway" "ngw" {
   allocation_id = aws_eip.lb.id
   subnet_id     = aws_subnet.main["test_2"].id
-  tags          = var.nat_gateway.tags
+  tags          = var.vpc.nat_gateway.tags
 
   # To ensure proper ordering, it is recommended to add an explicit dependency
   # on the Internet Gateway for the VPC.
@@ -70,7 +70,7 @@ resource "aws_route_table" "rt" {
   #   # vpc_peering_connection_id =  
   # }
 
-  tags = var.route_table.tags
+  tags = var.vpc.route_table.tags
 }
 
 # you can also create aws_route resource separately instead of route{} block
@@ -105,5 +105,5 @@ resource "aws_vpc_peering_connection" "foo" {
   # Accepting connection by both VPCs
   auto_accept = true
 
-  tags = var.vpc_peering.tags
+  tags = var.vpc.vpc_peering.tags
 }

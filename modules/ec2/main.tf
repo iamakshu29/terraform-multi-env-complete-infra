@@ -3,8 +3,8 @@ resource "aws_instance" "main" {
   ami                    = each.value.ami
   instance_type          = each.value.instance_type
   key_name               = each.value.key_name
-  subnet_id              = local.subnet_ids[4] # need output from vpc.tf
-  vpc_security_group_ids = [aws_security_group.main]
+  subnet_id              = var.subnet_ids[0] # output from vpc module
+  vpc_security_group_ids = [aws_security_group.main.id]
   tags                   = each.value.tags
 }
 

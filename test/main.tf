@@ -1,24 +1,27 @@
 module "vpc" {
-  source = "../modules/vpc/"
+  source           = "../modules/vpc/"
   vpc              = var.vpc
-  subnet           = var.subnet
-  internet_gateway = var.internet_gateway
-  vpc_peering      = var.vpc_peering
-  nat_gateway      = var.nat_gateway
-  route_table      = var.route_table
-  use_igw = var.use_igw
-  use_nat = var.use_nat
+  use_igw          = var.use_igw
+  use_nat          = var.use_nat
 }
 
 module "ec2" {
   source = "../modules/ec2"
   ec2    = var.ec2
+  subnet_ids = [
+    module.vpc.public_subnet_1,
+    module.vpc.public_subnet_2,
+    module.vpc.private_subnet_1,
+    module.vpc.private_subnet_2
+  ]
 }
 
-# module "alb" {
-#   source = "../modules/alb"
-#   alb    = var.alb
-# }
+module "alb" {
+  source  = "../modules/alb"
+  alb     = var.alb
+  subnets = [module.vpc.public_subnet_1]
+  vpc_id  = module.vpc.vpc_id
+}
 
 # module "asg" {
 #   source = "../modules/asg"

@@ -1,6 +1,6 @@
 variable "env" {
   description = "Which Env is using by us"
-  default = ""  
+  default     = ""
 }
 
 variable "kms" {

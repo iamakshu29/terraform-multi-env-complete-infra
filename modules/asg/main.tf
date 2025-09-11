@@ -1,6 +1,8 @@
 # Auto Scaling Group resource
 resource "aws_autoscaling_group" "bar" {
-  name     = "foobar3-terraform-test"
+  for_each = var.asg.test_asg
+
+  name     = each.value.name
   max_size = 4
   min_size = 2
 
@@ -11,10 +13,9 @@ resource "aws_autoscaling_group" "bar" {
   desired_capacity  = 3
 
   # List of ALB/NLB names to add to the autoscaling group names.
-  target_group_arns = [aws_lb.test.arn]
+  target_group_arns =  var.aws_alb_arn
 
-  launch_configuration = aws_launch_configuration.foobar.name
-  vpc_zone_identifier  = [aws_subnet.main.id]
+  vpc_zone_identifier  = var.subnets
 
   instance_maintenance_policy {
     min_healthy_percentage = 90
@@ -22,7 +23,7 @@ resource "aws_autoscaling_group" "bar" {
   }
 
   launch_template {
-    id      = aws_launch_template.foo.id
+    id      = aws_launch_template.test_template[each.key].id
     version = "$Latest"
   }
 
@@ -39,27 +40,22 @@ resource "aws_autoscaling_group" "bar" {
   # false -> tag will be applied only to the ASG resource, not the EC2 instance it launches.
 
   tag {
-    key                 = "foo"
-    value               = "bar"
+    key                 = "test-asg"
+    value               = "EC2"
     propagate_at_launch = true
-  }
-
-  tag {
-    key                 = "lorem"
-    value               = "ipsum"
-    propagate_at_launch = false
   }
 }
 
 # Launch Template
-resource "aws_launch_template" "foo" {
-  name                   = "foo"
-  image_id               = "ami-0150ccaf51ab55a51"
-  instance_type          = "t2.micro"
-  key_name               = "terraform"
-  ebs_optimized          = true
-  vpc_security_group_ids = [aws_security_group.main]
-  description            = "Launch Template for Terraform/Opentofu project used by ASG"
+resource "aws_launch_template" "test_template" {
+  for_each = var.asg.launch_template
+  name                   = each.value.name
+  image_id               = each.value.image_id
+  instance_type          = each.value.instance_type
+  key_name               = each.value.key_name
+  ebs_optimized          = try(each.value.ebs_optimized,false)
+  vpc_security_group_ids = var.vpc_id
+  description            = each.value.description
 
   block_device_mappings {
     device_name = "/dev/sdf"
@@ -81,12 +77,10 @@ resource "aws_launch_template" "foo" {
   tag_specifications {
     resource_type = "instance"
 
-    tags = {
-      Name = "test"
-    }
+    tags = each.value.tags
   }
 
-  user_data = filebase64("${path.module}/example.sh")
+  # user_data = filebase64("${path.module}/example.sh")
 }
 
 

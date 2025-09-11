@@ -1,12 +1,13 @@
 data "aws_caller_identity" "current" {}
 
 # Symmetric Encryption KMS Key
-resource "aws_kms_key" "example" {
-  description = "A symmetric encryption KMS key"
-  enable_key_rotation = true
+resource "aws_kms_key" "test_kms_key" {
+
+  description = var.kms.description
+  enable_key_rotation = try(var.kms.key_rotate,false)
   
   #   default is 1 year
-  rotation_period_in_days = 60
+  rotation_period_in_days = try(var.kms.key_rotation_period,365)
 
   # delete the key permanently in x days, after we gave the deletion command. default is 30 days
   deletion_window_in_days = 7

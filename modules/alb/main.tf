@@ -6,7 +6,7 @@ resource "aws_lb" "test" {
   subnets         = var.subnets # expects a list
   # enable_deletion_protection = true
 
-  tags = var.alb.tags
+  tags = var.alb.alb_test.tags
 }
 
 # ALB Target Group
@@ -14,7 +14,7 @@ resource "aws_lb_target_group" "tcp-example" {
   name     = var.alb.alb_tg.name
   port     = try(var.alb.alb_tg.port,80)
   protocol = "TCP"
-  # vpc_id   = aws_vpc.main.id
+  vpc_id   = var.vpc_id
 
   target_group_health {
     dns_failover {

@@ -1,11 +1,10 @@
 resource "aws_instance" "main" {
-  for_each               = var.ec2
-  ami                    = each.value.ami
-  instance_type          = each.value.instance_type
-  key_name               = each.value.key_name
+  ami                    = var.ec2.ami
+  instance_type          = var.ec2.instance_type
+  key_name               = var.ec2.key_name
   subnet_id              = var.subnet_ids[0] # output from vpc module
   vpc_security_group_ids = [aws_security_group.main.id]
-  tags                   = each.value.tags
+  tags                   = var.ec2.tags
 }
 
 resource "aws_security_group" "main" {

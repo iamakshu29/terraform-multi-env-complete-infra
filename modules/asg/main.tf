@@ -54,7 +54,7 @@ resource "aws_launch_template" "test_template" {
   instance_type          = each.value.instance_type
   key_name               = each.value.key_name
   ebs_optimized          = try(each.value.ebs_optimized,false)
-  vpc_security_group_ids = var.vpc_id
+  vpc_security_group_ids = var.asg_sg_id
   description            = each.value.description
 
   block_device_mappings {

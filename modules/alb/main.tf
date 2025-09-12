@@ -1,7 +1,7 @@
 # ALB
 resource "aws_lb" "test" {
   name            = var.alb.alb_test.name
-  internal        = try(var.alb.alb_test.internal==true ? true: false,false)
+  internal        = try(var.alb.alb_test.internal,false)
   security_groups = [aws_security_group.lb_sg.id]
   subnets         = var.subnets # expects a list
   # enable_deletion_protection = true
@@ -50,7 +50,7 @@ resource "aws_lb_listener" "front_end" {
 
 # ALB Security Group
 resource "aws_security_group" "lb_sg" {
-  name        = "main-sg"
+  name        = "lb-sg"
   description = "allow port 80 and 22"
 }
 

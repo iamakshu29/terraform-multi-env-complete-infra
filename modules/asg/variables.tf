@@ -6,10 +6,10 @@ variable "subnets" {
   type = list(string)
 }
 
-variable "vpc_id" {
+variable "aws_alb_arn" {
   type = list(string)
 }
 
-variable "aws_alb_arn" {
+variable "asg_sg_id" {
   type = list(string)
 }

@@ -3,11 +3,11 @@ data "aws_caller_identity" "current" {}
 # Symmetric Encryption KMS Key
 resource "aws_kms_key" "test_kms_key" {
 
-  description = var.kms.description
-  enable_key_rotation = try(var.kms.key_rotate,false)
-  
+  description         = var.kms.description
+  enable_key_rotation = try(var.kms.key_rotate, false)
+
   #   default is 1 year
-  rotation_period_in_days = try(var.kms.key_rotation_period,365)
+  rotation_period_in_days = try(var.kms.key_rotation_period, 365)
 
   # delete the key permanently in x days, after we gave the deletion command. default is 30 days
   deletion_window_in_days = 7
@@ -17,43 +17,20 @@ resource "aws_kms_key" "test_kms_key" {
     Id      = "key-default-1"
     Statement = [
       {
-        Sid    = "Enable IAM User Permissions"
+        Sid    = "Enable account root access"
         Effect = "Allow"
         Principal = {
-          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-        },
+          AWS = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+        }
         Action   = "kms:*"
         Resource = "*"
       },
       {
-        Sid    = "Allow administration of the key"
+        Sid    = "Allow key usage by all IAM identities in the account"
         Effect = "Allow"
         Principal = {
-          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/Alice"
-        },
-        Action = [
-          "kms:ReplicateKey",
-          "kms:Create*",
-          "kms:Describe*",
-          "kms:Enable*",
-          "kms:List*",
-          "kms:Put*",
-          "kms:Update*",
-          "kms:Revoke*",
-          "kms:Disable*",
-          "kms:Get*",
-          "kms:Delete*",
-          "kms:ScheduleKeyDeletion",
-          "kms:CancelKeyDeletion"
-        ],
-        Resource = "*"
-      },
-      {
-        Sid    = "Allow use of the key"
-        Effect = "Allow"
-        Principal = {
-          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/Bob"
-        },
+          AWS = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+        }
         Action = [
           "kms:DescribeKey",
           "kms:Encrypt",
@@ -61,7 +38,7 @@ resource "aws_kms_key" "test_kms_key" {
           "kms:ReEncrypt*",
           "kms:GenerateDataKey",
           "kms:GenerateDataKeyWithoutPlaintext"
-        ],
+        ]
         Resource = "*"
       }
     ]

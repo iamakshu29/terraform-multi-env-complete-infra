@@ -15,7 +15,7 @@ resource "aws_db_instance" "test_db_instance" {
   max_allocated_storage = 20
 
   # required Argument for custom VPC
-  db_subnet_group_name = var.subnet_ids[0]
+  db_subnet_group_name = aws_db_subnet_group.test_rds["rds"].name
   db_name              = each.value.db_name
   engine               = each.value.engine
   engine_version       = each.value.engine_version

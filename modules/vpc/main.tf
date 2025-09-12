@@ -93,17 +93,17 @@ resource "aws_route_table_association" "rt_association" {
 }
 
 
-# VPC Peering Resource
-resource "aws_vpc_peering_connection" "foo" {
+# # VPC Peering Resource
+# resource "aws_vpc_peering_connection" "foo" {
 
-  # ID of VPC with which you are requesting to connected
-  peer_vpc_id = "vpc-23424"
+#   # ID of VPC with which you are requesting to connected
+#   peer_vpc_id = aws_vpc.main.id
 
-  # Id of requester VPC
-  vpc_id = aws_vpc.main.id
+#   # Id of requester VPC
+#   vpc_id = aws_vpc.main.id
 
-  # Accepting connection by both VPCs
-  auto_accept = true
+#   # Accepting connection by both VPCs
+#   auto_accept = true
 
-  tags = var.vpc.vpc_peering.tags
-}
+#   tags = var.vpc.vpc_peering.tags
+# }

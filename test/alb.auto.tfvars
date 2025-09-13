@@ -1,14 +1,14 @@
 alb = {
   alb_test = {
-    name     = "test-lb-tf"
+    name     = "test-alb"
     internal = false
     tags = {
-      Environment = "production"
+      Environment = "test"
     }
   }
 
   alb_tg = {
-    name = "tf-example-lb-tg"
+    name = "test-alb-tg"
     port = 80
   }
 

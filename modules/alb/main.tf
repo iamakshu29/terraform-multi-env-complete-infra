@@ -13,19 +13,17 @@ resource "aws_lb" "test" {
 resource "aws_lb_target_group" "tcp-example" {
   name     = var.alb.alb_tg.name
   port     = try(var.alb.alb_tg.port,80)
-  protocol = "TCP"
+  protocol = "HTTP"
   vpc_id   = var.vpc_id
 
-  target_group_health {
-    dns_failover {
-      minimum_healthy_targets_count      = "1"
-      minimum_healthy_targets_percentage = "off"
-    }
-
-    unhealthy_state_routing {
-      minimum_healthy_targets_count      = "1"
-      minimum_healthy_targets_percentage = "off"
-    }
+  health_check {
+    protocol            = "HTTP"
+    path                = "/"        # your app endpoint
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    matcher             = "200-399"
   }
 }
 
@@ -50,10 +48,10 @@ resource "aws_lb_listener" "front_end" {
 
 # ALB Security Group
 resource "aws_security_group" "lb_sg" {
-  name        = "lb-sg"
+  name        = "alb-sg"
   description = "allow port 80 and 22"
+  vpc_id = var.vpc_id
 }
-
 
 resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4_lb" {
   security_group_id = aws_security_group.lb_sg.id
@@ -71,13 +69,11 @@ resource "aws_vpc_security_group_ingress_rule" "allow_https_ipv4_lb" {
   to_port           = 443
 }
 
-
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4_lb" {
   security_group_id = aws_security_group.lb_sg.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
-
 
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv6_lb" {
   security_group_id = aws_security_group.lb_sg.id

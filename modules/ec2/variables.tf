@@ -2,6 +2,10 @@ variable "ec2" {
   description = "value"
 }
 
-variable "subnet_ids" {
+variable "subnet_id" {
   type = list(string)
+}
+
+variable "vpc_id" {
+  type = string
 }

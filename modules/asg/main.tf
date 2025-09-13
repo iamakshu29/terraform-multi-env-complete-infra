@@ -1,5 +1,5 @@
 # Auto Scaling Group resource
-resource "aws_autoscaling_group" "bar" {
+resource "aws_autoscaling_group" "test_asg" {
   for_each = var.asg.test_asg
 
   name     = each.value.name
@@ -11,6 +11,8 @@ resource "aws_autoscaling_group" "bar" {
 
   health_check_type = "EC2"
   desired_capacity  = 3
+
+  # force_delete = true
 
   # List of ALB/NLB names to add to the autoscaling group names.
   target_group_arns =  var.aws_alb_arn
@@ -49,6 +51,7 @@ resource "aws_autoscaling_group" "bar" {
 # Launch Template
 resource "aws_launch_template" "test_template" {
   for_each = var.asg.launch_template
+  
   name                   = each.value.name
   image_id               = each.value.image_id
   instance_type          = each.value.instance_type

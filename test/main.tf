@@ -5,22 +5,20 @@ module "vpc" {
   use_nat = var.use_nat
 }
 
-# module "ec2" {
-#   source = "../modules/ec2"
-#   ec2    = var.ec2
+module "ec2" {
+  source = "../modules/ec2"
+  ec2    = var.ec2
+  vpc_id      = module.vpc.vpc_id
 
-#   # variable created, when need to use the output of another module
-#   subnet_ids = [
-#     module.vpc.public_subnet_1,
-#     module.vpc.public_subnet_2,
-#     module.vpc.private_subnet_1,
-#     module.vpc.private_subnet_2
-#   ]
-# }
+  # variable created, when need to use the output of another module
+  subnet_id = [
+    module.vpc.public_subnet_1
+  ]
+}
 
 module "asg_sg" {
   source = "../modules/SecurityGroup"
-   vpc_id      = module.vpc.vpc_id
+  vpc_id      = module.vpc.vpc_id
 }
 
 module "alb" {
@@ -38,7 +36,7 @@ module "asg" {
   asg         = var.asg
   subnets     = [module.vpc.public_subnet_1]
   asg_sg_id      = [module.asg_sg.sg_id] # expect list here
-  aws_alb_arn = [module.alb.aws_alb_arn]
+  aws_alb_arn = [module.alb.aws_alb_target_group_arn]
 }
 
 # module "kms" {

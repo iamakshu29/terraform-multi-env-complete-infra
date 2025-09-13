@@ -1,7 +1,7 @@
 resource "aws_security_group" "asg_sg" {
-  name        = "main-sg"
-  vpc_id = var.vpc_id
+  name        = "test-asg-sg"
   description = "allow port 80 and 22"
+  vpc_id = var.vpc_id
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {

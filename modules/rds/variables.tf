@@ -6,6 +6,6 @@ variable "subnet_ids" {
   type = list(string)
 }
 
-variable "kms_key_id" {
+variable "kms_key_arn" {
   type = string
 }

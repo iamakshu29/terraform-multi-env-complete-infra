@@ -9,7 +9,7 @@ rds = {
 
   test_db_instance = {
     db_instance_1 = {
-      db_name        = "mydb"
+      db_name        = "testdb"
       engine         = "mysql"
       engine_version = "8.0"
       instance_class = "db.t3.micro"

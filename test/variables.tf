@@ -18,7 +18,7 @@ variable "alb" {
   default     = {}
 }
 
-variable "s3" {
+variable "mybucket" {
   description = "value"
   default     = {}
 }
